@@ -517,6 +517,10 @@ class Anno_Template {
 	public function get_acknowledgements($post_id = null) {
 		return $this->utils->texturized_meta($post_id, '_anno_acknowledgements');
 	}
+
+	public function get_author_notes($post_id = null) {
+		return $this->utils->texturized_meta($post_id, '_anno_author_notes');
+	}
 	
 	public function get_appendices($post_id = null) {
 		$out = '';
@@ -804,6 +808,16 @@ function anno_has_acknowledgements() {
 function anno_the_acknowledgements() {
 	$template = Anno_Keeper::retrieve('template');
 	echo $template->get_acknowledgements();
+}
+
+function anno_has_author_notes() {
+	$template = Anno_Keeper::retrieve('template');
+	return (bool) $template->get_author_notes();
+}
+
+function anno_the_author_notes() {
+	$template = Anno_Keeper::retrieve('template');
+	echo $template->get_author_notes();
 }
 
 function anno_has_funding_statement() {

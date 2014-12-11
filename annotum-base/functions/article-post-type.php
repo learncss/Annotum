@@ -108,6 +108,7 @@ function anno_article_meta_boxes($article) {
 	add_meta_box('references', _x('References', 'Meta box title', 'anno'), 'anno_references_meta_box', 'article', 'normal', 'high');
 	add_meta_box('funding', _x('Funding Statement', 'Meta box title', 'anno'), 'anno_funding_meta_box', 'article', 'normal', 'high');
 	add_meta_box('acknowledgements', _x('Acknowledgements', 'Meta box title', 'anno'), 'anno_acknowledgements_meta_box', 'article', 'normal', 'high');
+	add_meta_box('author_notes', _x('Author Notes', 'Meta box title', 'anno'), 'anno_author_notes_meta_box', 'article', 'normal', 'high');
 	add_meta_box('featured', _x('Featured', 'Meta box title', 'anno'), 'anno_featured_meta_box', 'article', 'side', 'default');
 	// Added
 	add_meta_box('journal_details', _x('Journal Details', 'Meta box title', 'anno'), 'anno_journal_details_meta_box', 'article', 'side', 'default');
@@ -225,6 +226,16 @@ function anno_acknowledgements_meta_box($post) {
 	$html = get_post_meta($post->ID, '_anno_acknowledgements', true);
 ?>
 	<textarea id="guy" class="anno-meta anno-meta-acknowledgements" name="anno_acknowledgements"><?php echo esc_textarea($html); ?></textarea>
+<?php
+}
+
+/**
+ * Author notes meta box markup
+ */
+function anno_author_notes_meta_box($post) {
+	$html = get_post_meta($post->ID, '_anno_author_notes', true);
+?>
+	<textarea id="guy" class="anno-meta anno-meta-author-notes" rows="6" name="anno_author_notes" placeholder='<corresp id="cor1">Author info<email>author@email.com</email></corresp>'>"><?php echo esc_textarea($html); ?></textarea>
 <?php
 }
 
@@ -355,6 +366,7 @@ function anno_article_save_post($post_id, $post) {
 			'anno_journal_received',
 			'anno_journal_accepted',
 			'anno_acknowledgements',
+			'anno_author_notes',
 			'anno_featured'
 		);
 		foreach ($anno_meta as $key) {
@@ -382,6 +394,7 @@ function anno_article_save_post($post_id, $post) {
 					case 'anno_journal_received':
 					case 'anno_journal_accepted':
 					case 'anno_acknowledgements':
+					case 'anno_author_notes':
 					default:
 						if (isset($_POST[$key])) {
 							$value = force_balance_tags($_POST[$key]);

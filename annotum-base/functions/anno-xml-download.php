@@ -483,6 +483,15 @@ class Anno_XML_Download {
 			</contrib-group>';
 		}
 
+		$author_notes = get_post_meta($article->ID, '_anno_author_notes', true);
+		if (!empty($author_notes)) {
+			$author_notes_xml = '<author-notes>
+			'.$author_notes.'
+			</author-notes>';
+		} else {
+			$author_notes_xml = '';
+		}
+
 		// Related Articles
 		$related_xml = '';
 		if(anno_workflow_enabled()){
@@ -533,6 +542,7 @@ class Anno_XML_Download {
 			'.$category_xml.'
 			'.$title_xml.'
 			'.$author_xml.'
+			'.$author_notes_xml.'
 			'.$pub_date_xml.'
 			'.$journal_volume_xml.'
 			'.$journal_issue_xml.'

@@ -1250,6 +1250,15 @@ class Kipling_DTD_Parser {
 					);
 				}
 
+				// Author Notes
+				$author_notes = trim(pq('author_notes p', $article_back)->text());
+				if (!empty($author_notes)) {
+			 		$post['postmeta'][] = array(
+						'key' => '_anno_author_notes',
+						'value' => $author_notes,
+					);
+				}
+
 				// Funding
 				$funding = trim(pq('funding-statement', $article_meta)->text());
 				if (!empty($funding)) {

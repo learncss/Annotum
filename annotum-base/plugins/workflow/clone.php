@@ -261,6 +261,7 @@ function annowf_clone_post_meta($orig_post_id, $new_post_id) {
 		'_anno_appendices' => 1, 
 		'_anno_appendices_html' => 1,
 		'_anno_acknowledgements' => 1,
+		'_anno_author_notes' => 1,
 		'_anno_funding' => 1, 
 		'_anno_journal_volume' => 1,
 		'_anno_journal_issue' => 1,
@@ -373,7 +374,8 @@ function annowf_clone_post_attachments($orig_post_id, $new_post_id) {
 				'_anno_journal_doi',
 				'_anno_journal_received',
 				'_anno_journal_accepted',
-				'_anno_acknowledgements', 
+				'_anno_acknowledgements',
+				'_anno_author_notes',
 			);
 			
 			$meta_data = get_metadata('post', $new_post_id);

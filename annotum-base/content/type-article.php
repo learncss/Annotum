@@ -83,6 +83,13 @@ if (CFCT_DEBUG) { cfct_banner(__FILE__); }
 			<ul class="authors nav">
 				<?php anno_the_authors(); ?>
 			</ul>
+
+			<?php if (anno_has_author_notes()): ?>
+				<section class="sec" id="author_notes">
+					<h1><span><?php _e('Author Notes', 'anno'); ?></span></h1>
+					<?php anno_the_author_notes(); ?>
+				</section>
+			<?php endif; ?>
 		</section>
 	</header>
 	<div class="main">
