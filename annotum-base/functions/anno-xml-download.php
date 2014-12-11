@@ -552,7 +552,7 @@ private function xml_back($article) {
 
 	private function xml_comment_author($comment) {
 		$author_xml = '<contrib-group>
-				<contrib>';
+				<contrib contrib-type="author">';
 		if (!empty($comment->user_id)) {
 			$user = get_userdata($comment->user_id);
 			$author_xml .= '
