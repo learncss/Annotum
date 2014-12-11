@@ -235,9 +235,11 @@ class Anno_XML_Download {
 		$cats = wp_get_object_terms($article->ID, 'article_category');
 		if (!empty($cats) && is_array($cats)) {
 			$category = get_category($cats[0]);
+			// Hard coding subject
+			$category->name = 'Original Research Article';
 			if (!empty($category)) {
 				$category_xml = '<article-categories>
-				<subj-group>
+				<subj-group subj-group-type="heading">
 					<subject>'.esc_html($category->name).'</subject>
 				</subj-group>
 			</article-categories>';
