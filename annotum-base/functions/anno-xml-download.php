@@ -335,15 +335,76 @@ class Anno_XML_Download {
 			$journal_lpage_xml = '<lpage>'.esc_html($journal_lpage).'</lpage>';
 		}
 
+		$journal_received = get_post_meta($article->ID, '_anno_journal_received', true);
+		$journal_accepted = get_post_meta($article->ID, '_anno_journal_accepted', true);
+		$received_date = explode('-', $journal_received);
+		$accepted_date = explode('-', $journal_accepted);
+		if (!empty($journal_received)) {
+			$journal_history_xml = '<history>';
+			$journal_history_xml .= '
+				<date date-type="received">
+					<day>'.$received_date[2].'</day>
+					<month>'.$received_date[1].'</month>
+					<year>'.$received_date[0].'</year>
+				</date>';
+			if (!empty($journal_accepted)) {
+				$journal_history_xml .= '
+				<date date-type="accepted">
+					<day>'.$accepted_date[2].'</day>
+					<month>'.$accepted_date[1].'</month>
+					<year>'.$accepted_date[0].'</year>
+				</date>';
+			}
+            $journal_history_xml .= '
+            </history>';
+		} else {
+			$journal_history_xml = '';
+		}
+
+		$journal_abbrev = cfct_get_option('journal_abbr');
+		if (!empty($journal_abbrev)) {
+			$journal_abbrev_xml = '<abbrev-journal-title abbrev-type="full">'.esc_html($journal_abbrev).'</abbrev-journal-title>';
+		} else {
+			$journal_abbrev_xml = '';
+		}
+
+		$journal_copyright = cfct_get_option('publisher_name');
+		if (!empty($journal_copyright)) {
+			$journal_copyright_xml = '
+			<permissions>
+              <copyright-statement>&#x00A9; '.date("Y").' '.$journal_copyright.'</copyright-statement>
+              <copyright-year>'.date("Y").'</copyright-year>
+              <copyright-holder>'.$journal_copyright.'</copyright-holder>
+            </permissions>';
+		} else { 
+			$journal_copyright_xml = '';
+		}
+
 		// Authors
 		$authors = get_post_meta($article->ID, '_anno_author_snapshot', true);
 		if (!empty($authors) && is_array($authors)) {
 
 			$author_xml = '<contrib-group>';
 
+			// Building array of institutes from all authors
+			foreach ($authors as $author) {
+				if (!empty($author['affiliation']) || !empty($author['institution'])) {
+					$all_institutions[] = explode(" | ", $author['institution']);
+				}
+			}
+			// Flatten array and make sure there are no duplicates
+			foreach ($all_institutions as $institution_array)
+			{
+				foreach($institution_array as $institution_key => $institution_array2)
+				{
+					$institution_list[] = $institution_array2;
+				}
+			}
+			$institution_list = array_values(array_unique($institution_list));
+
 			foreach ($authors as $author) {
 				$author_xml .= '
-				<contrib>';
+				<contrib contrib-type="author" corresp="yes">';
 				if (
 					(isset($author['surname']) && !empty($author['surname'])) ||
 					(isset($author['given_names']) && !empty($author['given_names'])) ||
@@ -372,17 +433,21 @@ class Anno_XML_Download {
 					</name>';
 					}
 
+					if (isset($author['degrees']) && !empty($author['degrees'])) {
+						$author_xml .= '
+						<degrees>'.esc_html($author['degrees']).'</degrees>';
+					}
+
 					// Affiliation legacy support
 					if (!empty($author['affiliation']) || !empty($author['institution'])) {
-						$author_xml .= '
-							<aff>';
-							if (!empty($author['affiliation'])) {
-								$author_xml .= esc_html($author['affiliation']);
-							}
-							if (!empty($author['institution'])) {
-								$author_xml .= '<institution>'.esc_html($author['institution']).'</institution>';
-							}
-						$author_xml .= '</aff>';
+						$institutions = explode(" | ", $author['institution']);
+						$authors_institutions = array_intersect($institution_list, $institutions);
+						foreach ( $authors_institutions as $key => $author_institution ) {
+							$author_xml .= '
+							<xref ref-type="aff" rid="aff'.($key + 1).'">
+								<sup>'.($key + 1).'</sup>
+							</xref>';
+						}
 					}
 
 					if (isset($author['bio']) && !empty($author['bio'])) {
@@ -397,6 +462,21 @@ class Anno_XML_Download {
 
 				$author_xml .= '
 				</contrib>';
+			}
+
+			if (!empty($author['affiliation']) || !empty($author['institution'])) {
+				foreach ( $institution_list as $key => $institution ) {
+					$author_xml .= '
+					<aff id="aff'.($key + 1).'">
+					';
+					if (!empty($author['affiliation'])) {
+						$author_xml .= esc_html($author['affiliation']);
+					}
+					if (!empty($author['institution'])) {
+						$author_xml .= '<institution><sup>'.($key + 1).'</sup>'.esc_html($institution).'</institution>';
+					}
+					$author_xml .= '</aff>';
+				}
 			}
 
 			$author_xml .= '
@@ -435,7 +515,7 @@ class Anno_XML_Download {
 			}
 		}
 
-			return
+		return
 '<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE article PUBLIC "-//NLM//DTD Journal Publishing DTD v3.0 20080202//EN" "journalpublishing3.dtd">
 <article article-type="research-article" xml:lang="en" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -457,6 +537,8 @@ class Anno_XML_Download {
 			'.$journal_issue_xml.'
 			'.$journal_fpage_xml.'
 			'.$journal_lpage_xml.'
+			'.$journal_history_xml.'
+			'.$journal_copyright_xml.'
 			'.$abstract_xml.'
 			'.$tag_xml.'
 			'.$funding_xml.'
@@ -586,10 +668,10 @@ private function xml_back($article) {
 					</name>';
 
 			// @TODO TDB whether or not to include email
-//			if (!empty($user->user_email)) {
-//				$author_xml .= '
-//				<email>'.esc_html($user->user_email).'</email>';
-//			}
+			if (!empty($user->user_email)) {
+				$author_xml .= '
+				<email>'.esc_html($user->user_email).'</email>';
+			}
 
 			// Affiliation legacy support
 			$affiliation = get_user_meta($user->ID, '_anno_affiliation', true);

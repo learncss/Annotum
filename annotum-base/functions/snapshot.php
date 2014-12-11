@@ -94,6 +94,9 @@ $markup = '
 				case 'bio':
 					$markup .= '<label for="'.$id.'">'.$allowed_keys[$key].': </label> <textarea id="'.$id.'" class="'.$class.'" data-id="'.esc_attr($uid).'" name="'.$name.'">'.esc_textarea($value).'</textarea>';
 					break;
+				case 'institution':
+					$markup .= '<label for="'.$id.'">'.$allowed_keys[$key].': </label> <textarea id="'.$id.'" class="'.$class.'" data-id="'.esc_attr($uid).'" name="'.$name.'">'.esc_textarea($value).'</textarea>';
+					break;
 				default:
 					$markup .= '<label for="'.$id.'">'.$allowed_keys[$key].': </label> <input type="text" id="'.$id.'" value="'.esc_attr($value).'" class="'.$class.'" data-id="'.esc_attr($uid).'" name="'.$name.'" />';
 					break;

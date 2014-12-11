@@ -17,7 +17,8 @@ global $anno_user_meta;
 $anno_user_meta = apply_filters('anno_user_meta', array(
 	'_anno_prefix' => _x('Name Prefix', 'form label', 'anno'),
 	'_anno_suffix' => _x('Name Suffix', 'form label', 'anno'),
-	'_anno_institution' => _x('Institution', 'form label', 'anno'),
+	'_anno_degrees' => _x('Degrees', 'form label', 'anno'),
+	'_anno_institution' => _x('Institution (separate multiple institutions with [space]|[space])', 'form label', 'anno'),
 	'_anno_department' => _x('Department', 'form label', 'anno'),
 	'_anno_city' => _x('City', 'form label', 'anno'),
 	'_anno_state' => _x('State', 'form label', 'anno'),
@@ -60,7 +61,15 @@ function anno_profile_fields($user) {
 ?>
 				<tr>
 					<th><label for="<?php echo esc_attr($key); ?>"><?php echo esc_html($label); ?></label></th>
-					<td><input type="text" name="<?php echo esc_attr($key); ?>" class="regular-text" id="<?php echo esc_attr($key); ?>" value="<?php echo esc_attr($meta_val); ?>" />
+					<?php
+					switch ($key) {
+					    case '_anno_institution':
+					        echo '<td><textarea name="'.esc_attr($key).'" class="regular-text" id="'.esc_attr($key).'" rows="4">'.esc_attr($meta_val).'</textarea>';
+					        break;
+					    default:
+					        echo '<td><input type="text" name="'.esc_attr($key).'" class="regular-text" id="'.esc_attr($key).'" value="'.esc_attr($meta_val).'" /></td>';
+					} 
+					?>
 				</tr>
 <?php
 		} // foreach
