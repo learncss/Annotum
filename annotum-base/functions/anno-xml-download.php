@@ -444,7 +444,7 @@ class Anno_XML_Download {
 		<journal-meta>
 			'.$journal_id_xml.'
 			'.$journal_title_xml.'
-			'.$pub_issn_xml.'
+			'.$journal_issn_xml.'
 			'.$publisher_xml.'
 		</journal-meta>
 		<article-meta>
