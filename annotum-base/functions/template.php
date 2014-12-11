@@ -490,6 +490,30 @@ class Anno_Template {
 		return $this->utils->texturized_meta($post_id, '_anno_funding');
 	}
 	
+	// ADDED
+	public function get_journal_volume($post_id = null) {
+		return $this->utils->texturized_meta($post_id, '_anno_journal_volume');
+	}
+	public function get_journal_issue($post_id = null) {
+		return $this->utils->texturized_meta($post_id, '_anno_journal_issue');
+	}
+	public function get_journal_fpage($post_id = null) {
+		return $this->utils->texturized_meta($post_id, '_anno_journal_fpage');
+	}
+	public function get_journal_lpage($post_id = null) {
+		return $this->utils->texturized_meta($post_id, '_anno_journal_lpage');
+	}
+	public function get_journal_doi($post_id = null) {
+		return $this->utils->texturized_meta($post_id, '_anno_journal_doi');
+	}
+	public function get_journal_received($post_id = null) {
+		return $this->utils->texturized_meta($post_id, '_anno_journal_received');
+	}
+	public function get_journal_accepted($post_id = null) {
+		return $this->utils->texturized_meta($post_id, '_anno_journal_accepted');
+	}
+	// END ADDED
+	
 	public function get_acknowledgements($post_id = null) {
 		return $this->utils->texturized_meta($post_id, '_anno_acknowledgements');
 	}
@@ -791,6 +815,78 @@ function anno_the_funding_statement() {
 	$template = Anno_Keeper::retrieve('template');
 	echo $template->get_funding_statement();
 }
+
+// ADDED
+//Volume
+function anno_has_journal_volume() {
+	$template = Anno_Keeper::retrieve('template');
+	return (bool) $template->get_journal_volume();
+}
+function anno_the_journal_volume() {
+	$template = Anno_Keeper::retrieve('template');
+	echo $template->get_journal_volume();
+}
+
+// Issue
+function anno_has_journal_issue() {
+	$template = Anno_Keeper::retrieve('template');
+	return (bool) $template->get_journal_issue();
+}
+function anno_the_journal_issue() {
+	$template = Anno_Keeper::retrieve('template');
+	echo $template->get_journal_issue();
+}
+
+// Fpage
+function anno_has_journal_fpage() {
+	$template = Anno_Keeper::retrieve('template');
+	return (bool) $template->get_journal_fpage();
+}
+function anno_the_journal_fpage() {
+	$template = Anno_Keeper::retrieve('template');
+	echo $template->get_journal_fpage();
+}
+
+// Lpage
+function anno_has_journal_lpage() {
+	$template = Anno_Keeper::retrieve('template');
+	return (bool) $template->get_journal_lpage();
+}
+function anno_the_journal_lpage() {
+	$template = Anno_Keeper::retrieve('template');
+	echo $template->get_journal_lpage();
+}
+
+// DOI
+function anno_has_journal_doi() {
+	$template = Anno_Keeper::retrieve('template');
+	return (bool) $template->get_journal_doi();
+}
+function anno_the_journal_doi() {
+	$template = Anno_Keeper::retrieve('template');
+	echo $template->get_journal_doi();
+}
+
+// Date journal was received
+function anno_has_journal_received() {
+	$template = Anno_Keeper::retrieve('template');
+	return (bool) $template->get_journal_received();
+}
+function anno_the_journal_received() {
+	$template = Anno_Keeper::retrieve('template');
+	echo $template->get_journal_received();
+}
+
+// Date journal was accepted
+function anno_has_journal_accepted() {
+	$template = Anno_Keeper::retrieve('template');
+	return (bool) $template->get_journal_accepted();
+}
+function anno_the_journal_accepted() {
+	$template = Anno_Keeper::retrieve('template');
+	echo $template->get_journal_accepted();
+}
+// END ADDED
 
 function anno_the_appendices() {
 	$template = Anno_Keeper::retrieve('template');

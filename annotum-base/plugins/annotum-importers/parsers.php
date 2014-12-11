@@ -1080,7 +1080,8 @@ class Kipling_DTD_Parser {
 	}
 
 	function parse($file) {
-		global $wp_filesystem;
+		global $wp_filesystem, $custom_meta_fields;
+
 		$authors = $posts = $attachments = $post = $author_snapshots = $authors_meta = array();
 
 		$file_content = $wp_filesystem->get_contents($file);
@@ -1256,6 +1257,18 @@ class Kipling_DTD_Parser {
 						'key' => '_anno_funding',
 						'value' => $funding,
 					);
+				}
+
+				// ADDED
+				// Loop through each variable to create key/value
+				foreach ($custom_meta_fields as $field) {
+					${$field['var']} = trim(pq($field['var'], $article_meta)->text());
+					if (!empty(${$field['var']})) {
+				 		$post['postmeta'][] = array(
+							'key' => $field['meta_title'],
+							'value' => $field['var'],
+						);
+					}
 				}
 
 				// Appendices

@@ -109,18 +109,20 @@ function anno_article_meta_boxes($article) {
 	add_meta_box('funding', _x('Funding Statement', 'Meta box title', 'anno'), 'anno_funding_meta_box', 'article', 'normal', 'high');
 	add_meta_box('acknowledgements', _x('Acknowledgements', 'Meta box title', 'anno'), 'anno_acknowledgements_meta_box', 'article', 'normal', 'high');
 	add_meta_box('featured', _x('Featured', 'Meta box title', 'anno'), 'anno_featured_meta_box', 'article', 'side', 'default');
+	// Added
+	add_meta_box('journal_details', _x('Journal Details', 'Meta box title', 'anno'), 'anno_journal_details_meta_box', 'article', 'side', 'default');
 
 	if (!empty($appendices)) {
 		add_meta_box('appendices', _x('Appendices', 'Meta box title', 'anno'), 'anno_appendices_meta_box', 'article', 'normal', 'high');
 	}
 
 	if (current_user_can('editor') || current_user_can('administrator')) {
-		add_meta_box('convert', _x('Convert To Post', 'Meta box title', 'anno'), 'anno_convert_meta_box', 'article', 'side', 'low');
+/*		add_meta_box('convert', _x('Convert To Post', 'Meta box title', 'anno'), 'anno_convert_meta_box', 'article', 'side', 'low');
 		// Dont load the DOI meta box on brand new articles, guid has not been generated yet to generate the DOI
 		if ($article->post_status != 'auto-draft') {
 			add_meta_box('doi-deposit', _x('DOI Deposit', 'Meta box title', 'anno'), 'anno_deposit_doi_meta_box', 'article', 'side', 'low');
 		}
-	}
+*/	}
 }
 add_action('add_meta_boxes_article', 'anno_article_meta_boxes');
 
@@ -237,6 +239,106 @@ function anno_featured_meta_box($post) {
 <?php
 }
 
+/** ADDED
+ * Add journal info (ie. volume, issue, etc.)
+	add_meta_box('journaldetails', _x('Journal Details', 'Meta box title', 'anno'), 'anno_journaldetails_meta_box', 'article', 'side', 'default');
+ */
+$custom_meta_fields = array(
+	array(
+		'label'	=> 'Journal Volume',
+		'desc'  => 'The volume number of journal.',
+		'id'    => 'anno_journal_volume',
+		'var'	=> 'journal_volume',
+		'meta_title'    => '_anno_journal_volume',
+		'type'  => 'volume'
+	),
+	array(
+		'label'=> 'Journal Issue',
+		'desc'  => 'The issue number of journal.',
+		'id'    => 'anno_journal_issue',
+		'var'	=> 'journal_issue',
+		'meta_title'    => '_anno_journal_issue',
+		'type'  => 'issue'
+	),
+	array(
+		'label'=> 'First page',
+		'desc'  => 'First page number of article.',
+		'id'    => 'anno_journal_fpage',
+		'var'	=> 'journal_fpage',
+		'meta_title'    => '_anno_journal_fpage',
+		'type'  => 'fpage'
+	),
+	array(
+		'label'=> 'Last page',
+		'desc'  => 'Last page number of article.',
+		'id'    => 'anno_journal_lpage',
+		'var'	=> 'journal_lpage',
+		'meta_title'    => '_anno_journal_lpage',
+		'type'  => 'lpage'
+	),
+	array(
+		'label'=> 'DOI',
+		'desc'  => 'DOI Link.',
+		'id'    => 'anno_journal_doi',
+		'var'	=> 'journal_doi',
+		'meta_title'    => '_anno_journal_doi',
+		'type'  => 'doi'
+	),
+	array(
+		'label'=> 'Date received',
+		'desc'  => 'The date the article was received.',
+		'id'    => 'anno_journal_received',
+		'var'	=> 'journal_received',
+		'meta_title'    => '_anno_journal_received',
+		'type'  => 'received'
+	),
+	array(
+		'label'=> 'Date accepted',
+		'desc'  => 'The date the article was accepted.',
+		'id'    => 'anno_journal_accepted',
+		'var'	=> 'journal_accepted',
+		'meta_title'    => '_anno_journal_accepted',
+		'type'  => 'accepted'
+	)
+);
+
+function anno_journal_details_meta_box($post) {
+	global $custom_meta_fields;
+	// Use nonce for verification
+	echo '<input type="hidden" name="custom_meta_box_nonce" value="'.wp_create_nonce(basename(__FILE__)).'" />';
+	 
+	// Begin the field table and loop
+	foreach ($custom_meta_fields as $field) {
+		// get value of this field if it exists for this post
+		$html = get_post_meta($post->ID, $field['meta_title'], true);
+		// begin a table row with
+		echo '<label for="'.$field['id'].'">'.$field['label'].'</label>';
+				switch($field['type']) {
+					case 'volume':
+						echo '<input type="text" name="'.$field['id'].'" id="'.$field['id'].'" value="'.esc_attr($html).'" size="27" /><br/>';
+					break;
+					case 'issue':
+						echo '<input type="text" name="'.$field['id'].'" id="'.$field['id'].'" value="'.esc_attr($html).'" size="27" /><br/>';
+					break;
+					case 'fpage':
+						echo '<input type="text" name="'.$field['id'].'" id="'.$field['id'].'" value="'.esc_attr($html).'" size="27" /><br/>';
+					break;
+					case 'lpage':
+						echo '<input type="text" name="'.$field['id'].'" id="'.$field['id'].'" value="'.esc_attr($html).'" size="27" /><br/>';
+					break;
+					case 'doi':
+						echo '<input type="text" name="'.$field['id'].'" id="'.$field['id'].'" value="'.esc_attr($html).'" size="27" /><br/>';
+					break;
+					case 'received':
+						echo '<input type="date" name="'.$field['id'].'" id="'.$field['id'].'" value="'.esc_attr($html).'" size="27" placeholder="yyyy-mm-dd" /><br/>';
+					break;
+					case 'accepted':
+						echo '<input type="date" name="'.$field['id'].'" id="'.$field['id'].'" value="'.esc_attr($html).'" size="27" placeholder="yyyy-mm-dd" /><br/>';
+					break;
+				} //end switch
+	} // end foreach
+}
+
 /**
  * Save post meta related to an article
  */
@@ -245,6 +347,13 @@ function anno_article_save_post($post_id, $post) {
 		$anno_meta = array(
 			'anno_subtitle',
 			'anno_funding',
+			'anno_journal_volume',
+			'anno_journal_issue',
+			'anno_journal_fpage',
+			'anno_journal_lpage',
+			'anno_journal_doi',
+			'anno_journal_received',
+			'anno_journal_accepted',
 			'anno_acknowledgements',
 			'anno_featured'
 		);
@@ -265,6 +374,13 @@ function anno_article_save_post($post_id, $post) {
 						break;
 					case 'anno_subtitle':
 					case 'anno_funding':
+					case 'anno_journal_volume':
+					case 'anno_journal_issue':
+					case 'anno_journal_fpage':
+					case 'anno_journal_lpage':
+					case 'anno_journal_doi':
+					case 'anno_journal_received':
+					case 'anno_journal_accepted':
 					case 'anno_acknowledgements':
 					default:
 						if (isset($_POST[$key])) {

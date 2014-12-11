@@ -24,6 +24,43 @@ if (CFCT_DEBUG) { cfct_banner(__FILE__); }
 		<div class="meta">
 			<time class="published" pubdate datetime="<?php the_time('c'); ?>"><?php the_time('F j, Y'); ?></time>
 			<?php anno_the_terms('article_category', '<span class="article-categories"> <span class="sep">&middot;</span> ', ',', '</span>'); ?>
+			<?php if (anno_has_journal_volume()): ?>
+				<section class="sec" id="journal-details">
+					<h1><span><?php _e('Journal details', 'anno'); ?></span></h1>
+					<?php 
+					echo '<dl>';
+					if (anno_has_journal_volume()) {
+						echo '<dt>Journal Volume</dt>';
+						echo '<dd>'.anno_the_journal_volume().'</dd>';
+					}
+					if (anno_has_journal_issue()) {
+						echo '<dt>Journal Issue</dt>';
+						echo '<dd>'.anno_the_journal_issue().'</dd>';
+					}
+					if (anno_has_journal_fpage()) {
+						echo '<dt>Journal Fpage</dt>';
+						echo '<dd>'.anno_the_journal_fpage().'</dd>';
+					}
+					if (anno_has_journal_lpage()) {
+						echo '<dt>Journal Lpage</dt>';
+						echo '<dd>'.anno_the_journal_lpage().'</dd>';
+					}
+					if (anno_has_journal_doi()) {
+						echo '<dt>Journal DOI</dt>';
+						echo '<dd>'.anno_the_journal_doi().'</dd>';
+					}
+					if (anno_has_journal_received()) {
+						echo '<dt>Date article was recieved</dt>';
+						echo '<dd>'.anno_the_journal_received().'</dd>';
+					}
+					if (anno_has_journal_accepted()) {
+						echo '<dt>Date article was accepted</dt>';
+						echo '<dd>'.anno_the_journal_accepted().'</dd>';
+					}
+					echo '</dl>';
+					?>
+				</section>
+			<?php endif; ?>
 		</div>
 		<?php
 			cfct_misc('tools-bar');

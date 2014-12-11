@@ -159,6 +159,13 @@ function annowf_registered_post_meta_items() {
 		$workflow_meta_keys = array(
 			'_anno_acknowledgements',
 			'_anno_funding',
+			'_anno_journal_volume',
+			'_anno_journal_issue',
+			'_anno_journal_fpage',
+			'_anno_journal_lpage',
+			'_anno_journal_doi',
+			'_anno_journal_received',
+			'_anno_journal_accepted',
 			'_anno_subtitle',
 			'_anno_appendices',
 			'_anno_doi',

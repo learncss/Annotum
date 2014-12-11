@@ -426,20 +426,12 @@ class Anno_XML_Download {
 			'.$category_xml.'
 			'.$title_xml.'
 			'.$author_xml.'
-			'.$pub_date_xml.
-//			<history>
-//				<date date-type="submitted">
-//					<day>12</day>
-//					<month>12</month>
-//					<year>2010</year>
-//				</date>
-//				<date date-type="submitted">
-//					<day>12</day>
-//					<month>12</month>
-//					<year>2010</year>
-//				</date>
-//			</history>
-'			'.$abstract_xml.'
+			'.$pub_date_xml.'
+			'.$journal_volume_xml.'
+			'.$journal_issue_xml.'
+			'.$journal_fpage_xml.'
+			'.$journal_lpage_xml.'
+			'.$abstract_xml.'
 			'.$tag_xml.'
 			'.$funding_xml.'
 			'.$related_xml.'
