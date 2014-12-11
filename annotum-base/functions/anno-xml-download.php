@@ -524,6 +524,7 @@ class Anno_XML_Download {
 		<journal-meta>
 			'.$journal_id_xml.'
 			'.$journal_title_xml.'
+			'.$journal_abbrev_xml.'
 			'.$journal_issn_xml.'
 			'.$publisher_xml.'
 		</journal-meta>
