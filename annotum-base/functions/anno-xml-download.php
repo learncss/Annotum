@@ -223,7 +223,7 @@ class Anno_XML_Download {
 		}
 
 		// DOI
-		$doi = get_post_meta($article->ID, '_anno_doi', true);
+		$doi = get_post_meta($article->ID, '_anno_journal_doi', true);
 		if (!empty($doi)) {
 			$doi_xml = '<article-id pub-id-type="doi">'.esc_html($doi).'</article-id>';
 		}
