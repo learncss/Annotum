@@ -642,8 +642,16 @@ private function xml_back($article) {
 	private function xml_pubdate($pub_date) {
 		if (!empty($pub_date)) {
 			$pub_date = strtotime($pub_date);
+			// Electronic pub date
 			$pub_date_xml = '
 			<pub-date pub-type="epub">
+				<day>'.date('j', $pub_date).'</day>
+				<month>'.date('n', $pub_date).'</month>
+				<year>'.date('Y', $pub_date).'</year>
+			</pub-date>';
+			// Print pub date
+			$pub_date_xml .= '
+			<pub-date pub-type="ppub">
 				<day>'.date('j', $pub_date).'</day>
 				<month>'.date('n', $pub_date).'</month>
 				<year>'.date('Y', $pub_date).'</year>
