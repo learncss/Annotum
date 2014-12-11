@@ -309,6 +309,30 @@ class Anno_XML_Download {
 
 		$pub_date_xml = $this->xml_pubdate($article->post_date);
 
+		$journal_volume = get_post_meta($article->ID, '_anno_journal_volume', true);
+		$journal_volume_xml = '';
+		if (!empty($journal_volume)) {
+			$journal_volume_xml = '<volume>'.esc_html($journal_volume).'</volume>';
+		}
+
+		$journal_issue = get_post_meta($article->ID, '_anno_journal_issue', true);
+		$journal_issue_xml = '';
+		if (!empty($journal_issue)) {
+			$journal_issue_xml = '<issue>'.esc_html($journal_issue).'</issue>';
+		}
+
+		$journal_fpage = get_post_meta($article->ID, '_anno_journal_fpage', true);
+		$journal_fpage_xml = '';
+		if (!empty($journal_fpage)) {
+			$journal_fpage_xml = '<fpage>'.esc_html($journal_fpage).'</fpage>';
+		}
+
+		$journal_lpage = get_post_meta($article->ID, '_anno_journal_lpage', true);
+		$journal_lpage_xml = '';
+		if (!empty($journal_lpage)) {
+			$journal_lpage_xml = '<lpage>'.esc_html($journal_lpage).'</lpage>';
+		}
+
 		// Authors
 		$authors = get_post_meta($article->ID, '_anno_author_snapshot', true);
 		if (!empty($authors) && is_array($authors)) {
