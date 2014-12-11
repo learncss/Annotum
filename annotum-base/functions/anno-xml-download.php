@@ -190,13 +190,13 @@ class Anno_XML_Download {
 			$journal_id_xml = '';
 		}
 
-		// Publisher ISSN
-		$pub_issn = cfct_get_option('publisher_issn');
-		if (!empty($pub_issn)) {
-			$pub_issn_xml = '<issn pub-type="epub">'.esc_html($pub_issn).'</issn>';
+		// Journal ISSN
+		$journal_issn = cfct_get_option('journal_issn');
+		if (!empty($journal_issn)) {
+			$journal_issn_xml = '<issn pub-type="ppub">'.esc_html($journal_issn).'</issn>';
 		}
 		else {
-			$pub_issn_xml = '';
+			$journal_issn_xml = '';
 		}
 
 		// Abstract
